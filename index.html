@@ -1,13 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <title>Admin Dashboard | Fikya.id</title>
-    <link rel="stylesheet" href="css/style.css?v=1.0.1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Fikya.id</title>
+  <link rel="stylesheet" href="css/style.css?v=2.0.0">
 </head>
 <body>
-    <div class="container">
-        <h1>Moderasi Komentar</h1>
-        <div id="comment-list"><p>Memuat data...</p></div>
+
+  <!-- ── LOGIN SCREEN ────────────────────────────────────────── -->
+  <div id="login-screen">
+    <div class="login-box">
+      <div class="login-logo">Fikya<span>.id</span></div>
+      <h1>Admin Dashboard</h1>
+      <p class="login-subtitle">Masukkan admin key untuk melanjutkan.</p>
+
+      <form id="login-form" autocomplete="off">
+        <div class="input-wrap">
+          <input
+            type="password"
+            id="key-input"
+            placeholder="Admin key"
+            autocomplete="current-password"
+            required>
+        </div>
+        <p id="login-error" class="login-error" style="display:none">
+          Key salah atau tidak valid. Periksa kembali.
+        </p>
+        <button type="submit" id="login-btn" class="btn btn-primary btn-full">
+          Masuk
+        </button>
+      </form>
     </div>
-    
-    <script src="js/admin.js?v=1.0.1"></script>
+  </div>
+
+  <!-- ── DASHBOARD ───────────────────────────────────────────── -->
+  <div id="dashboard" style="display:none">
+
+    <header class="app-header">
+      <div class="header-left">
+        <span class="header-logo">Fikya<span>.id</span></span>
+        <h1>Moderasi Komentar</h1>
+      </div>
+      <div class="header-right">
+        <span class="pending-badge">
+          <span id="pending-count">0</span> pending
+        </span>
+        <button class="btn btn-secondary btn-sm" onclick="loadComments()" title="Refresh">
+          ↻ Refresh
+        </button>
+        <button class="btn btn-ghost btn-sm" onclick="logout()">
+          Keluar
+        </button>
+      </div>
+    </header>
+
+    <main class="container">
+
+      <!-- Filter bar (muncul otomatis jika ada > 1 postId) -->
+      <div id="filter-bar" class="filter-bar"></div>
+
+      <!-- Bulk action bar (muncul saat ada yang dicentang) -->
+      <div id="bulk-bar" class="bulk-bar" style="display:none">
+        <span class="bulk-count"></span>
+        <div class="bulk-actions">
+          <button class="btn btn-approve btn-sm" onclick="bulkAction('approved')">
+            ✓ Approve Semua
+          </button>
+          <button class="btn btn-delete btn-sm" onclick="bulkAction('deleted')">
+            ✕ Hapus Semua
+          </button>
+          <button class="btn btn-ghost btn-sm" onclick="toggleSelectAll(false)">
+            Batal Pilih
+          </button>
+        </div>
+      </div>
+
+      <!-- Select all -->
+      <div id="select-all-row" class="select-all-row" style="display:none">
+        <label>
+          <input type="checkbox" onchange="toggleSelectAll(this.checked)">
+          Pilih semua yang terlihat
+        </label>
+      </div>
+
+      <!-- Comment list -->
+      <div id="comment-list">
+        <div class="loading-state">
+          <div class="spinner"></div>
+          <span>Memuat komentar...</span>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ── TOAST CONTAINER ──────────────────────────────────────── -->
+  <div id="toast-container" aria-live="polite"></div>
+
+  <!-- ── CONFIRM DIALOG ───────────────────────────────────────── -->
+  <div id="confirm-overlay" class="confirm-overlay" style="display:none" role="dialog" aria-modal="true">
+    <div class="confirm-box">
+      <p id="confirm-message"></p>
+      <div class="confirm-actions">
+        <button id="confirm-cancel" class="btn btn-secondary">Batal</button>
+        <button id="confirm-ok"     class="btn btn-delete">Ya, Lanjutkan</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/admin.js?v=2.0.0"></script>
 </body>
+</html>
